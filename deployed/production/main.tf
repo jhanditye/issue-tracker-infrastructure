@@ -7,3 +7,7 @@ terraform {
     encrypt = true
   }
 }
+
+module "setup_module"{
+  source = "../../modules/hello-world"
+}
