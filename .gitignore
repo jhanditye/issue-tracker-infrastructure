@@ -1,5 +1,27 @@
+
+
+# Ignore Terraform state files
 *.tfstate
-*.tfstate.*
+*.tfstate.backup
+
+# Ignore the .terraform directory
 .terraform/
-*.tfvars
-*.backup
+
+# Ignore lock files
+*terraform.tf.lock.hcl
+
+# Ignore any generated files or directories
+*.tfvars.json
+*.tfplan
+
+# Exclude sensitive variable override files
+*.auto.tfvars
+
+# Exclude local override files
+override.tf
+
+# Exclude log files
+*.log
+
+# Ignore macOS metadata files
+.DS_Store
