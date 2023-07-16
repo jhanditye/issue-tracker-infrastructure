@@ -62,10 +62,9 @@ resource "aws_route_table" "issue_tracker_public_route_table"{
 
 
 resource "aws_instance" "instances" {
-  count         = 4
-  ami           = "ami-0eb260c4d5475b901"
-  instance_type = "t2.micro"
-
+  count         = var.instance_count
+  ami           = var.ami_id
+  instance_type = var.instance_type
   subnet_id        = element(aws_subnet.aws_issue_tracker_private_web_subnets.*.id, count.index % 2)
   vpc_security_group_ids  = [aws_security_group.instances.id]
 
@@ -79,25 +78,23 @@ resource "aws_instance" "instances" {
     Name = "EC2 Instance ${count.index+1}"
   }
 }
-resource "aws_security_group" "instances"{
-    name = "issue_tracker_instances"
-    vpc_id = aws_vpc.issue_tracker_vpc.id
-    depends_on = [ aws_vpc.issue_tracker_vpc]
-    tags = {
-        Name = "Issue Tracker EC2 Instances Security Group"
-    }
+
+resource "aws_security_group" "instances" {
+  name        = "issue_tracker_instances"
+  vpc_id      = aws_vpc.issue_tracker_vpc.id
+  depends_on  = [aws_vpc.issue_tracker_vpc]
+
+  tags = {
+    Name = "Issue Tracker EC2 Instances Security Group"
+  }
 }
 
-
-resource "aws_security_group_rule" "allow_http_inbound"{
-    type = "ingress"
-    security_group_id = aws_security_group.instances.id
-
-    from_port = 8080
-    to_port = 8080
-
-    protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+resource "aws_security_group_rule" "allow_http_inbound" {
+  type              = "ingress"
+  security_group_id = aws_security_group.instances.id
+  from_port         = 8080
+  to_port           = 8080
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
 }
-
 
