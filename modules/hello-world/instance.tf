@@ -66,10 +66,45 @@ resource "aws_route_table_association" "public" {
   route_table_id = aws_route_table.issue_tracker_public_route_table.id
 }
 
+resource "aws_security_group" "issue_tracker_alb_sg" {
+  name   = "issue-tracker-alb-sg"
+  vpc_id = aws_vpc.issue_tracker_vpc.id
+
+  tags = {
+    Name = "Issue Tracker ALB Security Group"
+  }
+}
+
+resource "aws_security_group_rule" "issue_tracker_alb_http_inbound" {
+  type              = "ingress"
+  security_group_id = aws_security_group.issue_tracker_alb_sg.id
+
+  from_port   = 80
+  to_port     = 80
+  protocol    = "tcp"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  description = "Allow inbound HTTP from anywhere"
+
+}
+
+resource "aws_security_group_rule" "issue_tracker_alb_all_outbound" {
+  type              = "egress"
+  security_group_id = aws_security_group.issue_tracker_alb_sg.id
+
+  from_port   = 0
+  to_port     = 0
+  protocol    = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+
+  description = "Allow all outbound traffic"
+}
+
 resource "aws_lb" "issue_tracker_lb" {
   name               = "issue-tracker-lb"
   load_balancer_type = "application"
   subnets            = aws_subnet.aws_issue_tracker_public_subnets[*].id
+  security_groups    = [aws_security_group.issue_tracker_alb_sg.id]
 
   tags = {
     Name = "Issue Tracker Load Balancer"
@@ -111,7 +146,7 @@ resource "aws_lb_target_group_attachment" "issue_tracker_target_group_attachment
   count            = var.instance_count
   target_group_arn = aws_lb_target_group.issue_tracker_target_group.arn
   target_id        = aws_instance.instances[count.index].id
-
+  port             = 8080
 
 }
 
@@ -143,11 +178,29 @@ resource "aws_instance" "instances" {
 
   user_data = <<-EOF
     #!/bin/bash
-    echo "Hello, World ${count.index % 2 + 1}" > index.html
+    echo "Hello, World ${count.index}" > index.html
     python3 -m http.server 8080 &
   EOF
 
   tags = {
     Name = "EC2 Instance ${count.index+1}"
+  }
+}
+
+resource "aws_route53_zone" "issue_tracker" {
+  name = "www.trackitall.org"
+
+
+}
+
+resource "aws_route53_record" "issue_tracker_A_record" {
+  name    = "www.trackitall.org"
+  type    = "A"
+  zone_id = aws_route53_zone.issue_tracker.zone_id
+
+  alias {
+    name                   = aws_lb.issue_tracker_lb.dns_name
+    zone_id                = aws_lb.issue_tracker_lb.zone_id
+    evaluate_target_health = true
   }
 }
