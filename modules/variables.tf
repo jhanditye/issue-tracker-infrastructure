@@ -91,7 +91,7 @@ variable "asg_min_size" {
 variable "asg_max_size" {
   description = "Auto scaling maximum size"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "asg_desired_capacity" {
@@ -130,17 +130,28 @@ variable "asg_update_default_version" {
   default     = true
 }
 
-variable "asg_image_id" {
-  description = "Auto scaling group image id"
-  type        = string
-  default     = "ami-026b57f3c383c2eec"
+
+data "asg_image_id" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"] # Canonical
+
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
 }
 
 variable "asg_instance_type" {
-  description = "Auto scaling group instance type"
+  description = "EC2 instance type"
   type        = string
-  default     = "t3.micro"
+  default     = "t2.micro"
 }
+
 
 variable "asg_ebs_optimized" {
   description = "Auto scaling group ebs optimized"
@@ -154,47 +165,7 @@ variable "asg_enable_monitoring" {
   default     = true
 }
 
-variable "asg_create_iam_instance_profile" {
-  description = "Auto scaling group create iam instance profile"
-  type        = bool
-  default     = true
-}
 
-variable "asg_iam_role_name" {
-  description = "Auto scaling group iam role name"
-  type        = string
-  default     = "issue-tracker-asg-iam-role"
-}
-
-variable "asg_iam_role_path" {
-  description = "Auto scaling group iam role path"
-  type        = string
-  default     = "/ec2/"
-}
-
-variable "asg_iam_role_description" {
-  description = "Auto scaling group iam role description"
-  type        = string
-  default     = "issue-tracker-asg-iam-role"
-}
-
-variable "asg_iam_role_tags" {
-  description = "Auto scaling group iam role tags"
-  type        = map(string)
-  default     = { "Name" = "issue-tracker-asg-iam-role", "created-by" = "terraform" }
-}
-
-variable "asg_block_device_mappings_volume_size_0" {
-  description = "Auto scaling group block device mapping volume size 0"
-  type        = number
-  default     = 20
-}
-
-variable "asg_block_device_mappings_volume_size_1" {
-  description = "Auto scaling group block device mapping volume size 1"
-  type        = number
-  default     = 30
-}
 
 variable "asg_instance_tags" {
   description = "Auto scaling group instance tags"
