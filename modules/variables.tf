@@ -274,31 +274,31 @@ variable "rds_identifier" {
 variable "rds_mysql_engine" {
   description = "Relational database service mysql engine"
   type        = string
-  default     = "mysql"
+  default     = "postgres"
 }
 
 variable "rds_engine_version" {
   description = "Relational database service mysql engine version"
   type        = string
-  default     = "8.0.27"
+  default     = "15.3"
 }
 
 variable "rds_family" {
   description = "Relational database service family"
   type        = string
-  default     = "mysql8.0"
+  default     = "postgres15"
 }
 
 variable "rds_major_engine_version" {
   description = "Relational database service major engine version"
   type        = string
-  default     = "8.0"
+  default     = "15"
 }
 
 variable "rds_instance_class" {
   description = "Relational database service instance class"
   type        = string
-  default     = "db.t2.small"
+  default     = "db.t2.micro"
 }
 
 variable "rds_allocated_storage" {
@@ -316,19 +316,23 @@ variable "rds_max_allocated_storage" {
 variable "rds_db_name" {
   description = "Relational database service db name"
   type        = string
-  default     = "issue-tracker_mysql"
+  default     = "issue-tracker-postgres-db"
 }
 
 variable "rds_username" {
   description = "Relational database service username"
   type        = string
-  default     = "issue-tracker_user"
+  default     = "trackitall_dev"
 }
 
 variable "rds_port" {
   description = "Relational database service port"
   type        = number
-  default     = 3306
+  default     = 5432
+}
+
+data "aws_secretsmanager_secret_version" "db_secret" {
+  secret_id = "arn:aws:secretsmanager:eu-west-2:909656370298:secret:dev/issue-tracker/postgresql-WIXSJU"
 }
 
 variable "rds_multi_az" {
