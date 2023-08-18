@@ -7,3 +7,7 @@ terraform {
     encrypt = true
   }
 }
+
+module "dev_module"{
+  source = "../../modules/dev"
+}
