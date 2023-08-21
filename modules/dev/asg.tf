@@ -60,7 +60,7 @@ module "asg" {
   launch_template_description = var.asg_launch_template_description
   update_default_version      = var.asg_update_default_version
 
-  image_id          = data.asg_image_id.ubuntu.id
+  image_id          = data.aws_ami.ubuntu.id
   instance_type     = var.asg_instance_type
   ebs_optimized     = var.asg_ebs_optimized
   enable_monitoring = var.asg_enable_monitoring

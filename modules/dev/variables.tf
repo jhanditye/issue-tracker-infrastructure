@@ -131,7 +131,7 @@ variable "asg_update_default_version" {
 }
 
 
-data "asg_image_id" "ubuntu" {
+data "aws_ami" "ubuntu" {
   most_recent = true
   owners      = ["099720109477"] # Canonical
 
