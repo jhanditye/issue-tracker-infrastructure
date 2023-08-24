@@ -72,12 +72,6 @@ module "asg" {
       description           = "eth0"
       device_index          = 0
       security_groups       = [module.asg_sg.security_group_id]
-    },
-    {
-      delete_on_termination = true
-      description           = "eth1"
-      device_index          = 1
-      security_groups       = [module.asg_sg.security_group_id]
     }
   ]
 

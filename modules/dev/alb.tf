@@ -6,7 +6,7 @@ module "alb" {
   
   name = var.alb_name
   vpc_id = module.vpc.vpc_id
-  subnets = var.vpc_public_subnets
+  subnets = module.vpc.public_subnets
   security_groups = [module.alb_http_sg.security_group_id]
 
   http_tcp_listeners = [

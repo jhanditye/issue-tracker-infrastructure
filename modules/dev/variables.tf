@@ -85,19 +85,19 @@ variable "asg_name" {
 variable "asg_min_size" {
   description = "Auto scaling minimum size"
   type        = number
-  default     = 0
+  default     = 1
 }
 
 variable "asg_max_size" {
   description = "Auto scaling maximum size"
   type        = number
-  default     = 2
+  default     = 3
 }
 
 variable "asg_desired_capacity" {
   description = "Auto scaling desired capacity"
   type        = number
-  default     = 1
+  default     = 2
 }
 
 variable "asg_wait_for_capacity_timeout" {
@@ -156,7 +156,7 @@ variable "asg_instance_type" {
 variable "asg_ebs_optimized" {
   description = "Auto scaling group ebs optimized"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "asg_enable_monitoring" {
@@ -298,7 +298,7 @@ variable "rds_major_engine_version" {
 variable "rds_instance_class" {
   description = "Relational database service instance class"
   type        = string
-  default     = "db.t2.micro"
+  default     = "db.t3.micro"
 }
 
 variable "rds_allocated_storage" {
@@ -313,10 +313,17 @@ variable "rds_max_allocated_storage" {
   default     = 100
 }
 
+variable "rds_storage_encrypted" {
+  description = "Encryption at rest status"
+  type        = bool
+  default     = true
+}
+
+
 variable "rds_db_name" {
   description = "Relational database service db name"
   type        = string
-  default     = "issue-tracker-postgres-db"
+  default     = "IssueTrackerPostgresDB"
 }
 
 variable "rds_username" {
@@ -356,7 +363,7 @@ variable "rds_backup_window" {
 variable "rds_enabled_cloudwatch_logs_exports" {
   description = "Relational database service enabled cloudwatch log exports"
   type        = list(any)
-  default     = ["general"]
+  default     = ["postgresql", "upgrade"]
 }
 
 variable "rds_create_cloudwatch_log_group" {

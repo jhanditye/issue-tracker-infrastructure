@@ -35,6 +35,7 @@ module "rds" {
 
   allocated_storage     = var.rds_allocated_storage
   max_allocated_storage = var.rds_max_allocated_storage
+  storage_encrypted = var.rds_storage_encrypted
 
   db_name  = var.rds_db_name
   username = var.rds_username
@@ -68,3 +69,5 @@ module "rds" {
   db_parameter_group_tags = var.rds_db_parameter_group_tags
   db_subnet_group_tags    = var.rds_db_subnet_group_tags
 }
+
+
