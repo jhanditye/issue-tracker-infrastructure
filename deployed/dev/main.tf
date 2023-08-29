@@ -9,5 +9,5 @@ terraform {
 }
 
 module "dev_module" {
-  source = "../../modules/experiment-architecture"
+  source = "../../modules/dev"
 }

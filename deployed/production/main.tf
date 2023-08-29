@@ -6,8 +6,5 @@ terraform {
     dynamodb_table = "terraform-state-locking"
     encrypt = true
   }
-}
+} 
 
-module "setup_module"{
-  source = "../../modules/hello-world"
-}
