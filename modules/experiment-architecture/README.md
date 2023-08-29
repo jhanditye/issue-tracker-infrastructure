@@ -1,0 +1,1 @@
+This architecture was created to experiment with using Autoscaling groups in place of manual EC2 instance provision, using an Ubuntu AMI. Unfortunalely, at present, the target groups of the created EC2 instances seem to always be unhealthy, regardless of whether the ASG(Auto Scaling Group) is created manually or with terraform's existsing modules. 

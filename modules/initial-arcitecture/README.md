@@ -1,0 +1,1 @@
+This initial architecture was created to practice provisioning common AWS resources such as Load Balancers and EC2 instances. It should't really be considered for much more than that. 

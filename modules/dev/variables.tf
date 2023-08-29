@@ -149,7 +149,7 @@ data "aws_ami" "ubuntu" {
 variable "asg_instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t2.micro"
+  default     = "t3.micro"
 }
 
 
@@ -197,6 +197,13 @@ variable "alb_sg_ingress_cidr_blocks" {
   type        = list(any)
   default     = ["0.0.0.0/0"]
 }
+
+variable "create_security_group" {
+  description = "Should LB create security group"
+  type        = bool
+  default     = false
+}
+
 
 variable "alb_sg_description" {
   description = "Application load balancer security group description"

@@ -1,19 +1,23 @@
-################################################################################
-# Local variables
-################################################################################
 
+# SSH Key 
+resource "aws_key_pair" "ssh" {
+  key_name   = "issue_tracker_ssh_key"
+  public_key = local.ssh_public_key
+}
+
+# Local variables
 locals {
-    user_data = <<-EOF
+  ssh_public_key = file("/home/jamie/my-key-pair.pub")
+  user_data = <<-EOF
               #!/bin/bash
               echo "Hello, World 1" > index.html
-              python3 -m http.server 80 &
+              python3 -m http.server 8080 &
               EOF
 }
 
 ################################################################################
 # Supporting Resources
 ################################################################################
-
 module "asg_sg" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 4.0"
@@ -22,29 +26,31 @@ module "asg_sg" {
   description = var.asg_sg_description
   vpc_id      = module.vpc.vpc_id
 
+  ingress_rules = ["ssh-tcp"]
+  ingress_cidr_blocks = [var.vpc_cidr]
+
   computed_ingress_with_source_security_group_id = [
     {
-      rule                     = "http-80-tcp"
+      rule                     = "http-8080-tcp"
       source_security_group_id = module.alb_http_sg.security_group_id
     }
   ]
   number_of_computed_ingress_with_source_security_group_id = 1
 
   egress_rules = ["all-all"]
-
   tags = var.asg_sg_tags
 }
 
 ################################################################################
 # Autoscaling scaling group (ASG)
 ################################################################################
-
 module "asg" {
   source  = "terraform-aws-modules/autoscaling/aws"
   version = "6.10.0"
 
   # Autoscaling group
   name = var.asg_name
+  key_name = aws_key_pair.ssh.key_name
 
   min_size                  = var.asg_min_size
   max_size                  = var.asg_max_size
@@ -65,16 +71,6 @@ module "asg" {
   ebs_optimized     = var.asg_ebs_optimized
   enable_monitoring = var.asg_enable_monitoring
 
-  
-  network_interfaces = [
-    {
-      delete_on_termination = true
-      description           = "eth0"
-      device_index          = 0
-      security_groups       = [module.asg_sg.security_group_id]
-    }
-  ]
-
   tag_specifications = [
     {
       resource_type = "instance"
@@ -88,3 +84,5 @@ module "asg" {
 
   tags = var.asg_tags
 }
+
+

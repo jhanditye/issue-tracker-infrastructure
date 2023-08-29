@@ -1,4 +1,4 @@
-
+/*
 # RDS Security groups
 
 module "rds_security_group" {
@@ -34,7 +34,7 @@ module "rds" {
   instance_class       = var.rds_instance_class
 
   allocated_storage     = var.rds_allocated_storage
-  max_allocated_storage = var.rds_max_allocated_storage
+  max_allocated_storage = var.rds_max_allocated_storages
   storage_encrypted = var.rds_storage_encrypted
 
   db_name  = var.rds_db_name
@@ -71,3 +71,4 @@ module "rds" {
 }
 
 
+*/
