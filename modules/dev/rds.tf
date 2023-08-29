@@ -1,4 +1,4 @@
-/*
+
 # RDS Security groups
 
 module "rds_security_group" {
@@ -10,7 +10,7 @@ module "rds_security_group" {
   computed_ingress_with_source_security_group_id = [
     {
       rule                     = "postgresql-tcp"
-      source_security_group_id = module.asg_sg.security_group_id
+      source_security_group_id = aws_security_group.issue_tracker_instance_sg.id
     }
   ]
   number_of_computed_ingress_with_source_security_group_id = 1
@@ -34,7 +34,7 @@ module "rds" {
   instance_class       = var.rds_instance_class
 
   allocated_storage     = var.rds_allocated_storage
-  max_allocated_storage = var.rds_max_allocated_storages
+  max_allocated_storage = var.rds_max_allocated_storage
   storage_encrypted = var.rds_storage_encrypted
 
   db_name  = var.rds_db_name
@@ -71,4 +71,3 @@ module "rds" {
 }
 
 
-*/

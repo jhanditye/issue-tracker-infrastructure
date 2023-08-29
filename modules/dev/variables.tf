@@ -56,80 +56,7 @@ variable "vpc_tags" {
 }
 
 
-# ASG variables
-
-variable "asg_sg_name" {
-  description = "Name of the autoscaling group security group"
-  type        = string
-  default     = "issue-tracker-asg-sg"
-}
-
-variable "asg_sg_description" {
-  description = "Description of the autoscaling group security group"
-  type        = string
-  default     = "issue-tracker-asg-sg"
-}
-
-variable "asg_sg_tags" {
-  description = "Tags for autoscaling group security group"
-  type        = map(string)
-  default     = { "Name" = "issue-tracker-asg-sg", "created-by" = "terraform" }
-}
-
-variable "asg_name" {
-  description = "Name of the autoscaling group"
-  type        = string
-  default     = "issue-tracker-asg"
-}
-
-variable "asg_min_size" {
-  description = "Auto scaling minimum size"
-  type        = number
-  default     = 1
-}
-
-variable "asg_max_size" {
-  description = "Auto scaling maximum size"
-  type        = number
-  default     = 3
-}
-
-variable "asg_desired_capacity" {
-  description = "Auto scaling desired capacity"
-  type        = number
-  default     = 2
-}
-
-variable "asg_wait_for_capacity_timeout" {
-  description = "Auto scaling wait for capacity timeout"
-  type        = number
-  default     = 0
-}
-
-variable "asg_health_check_type" {
-  description = "Auto scaling health check type"
-  type        = string
-  default     = "EC2"
-}
-
-variable "asg_launch_template_name" {
-  description = "Name of the autoscaling group launch template"
-  type        = string
-  default     = "issue-tracker-lt"
-}
-
-variable "asg_launch_template_description" {
-  description = "Description of the autoscaling group security group"
-  type        = string
-  default     = "issue-tracker-lt"
-}
-
-variable "asg_update_default_version" {
-  description = "Auto scaling group update default version"
-  type        = bool
-  default     = true
-}
-
+# Instance variables
 
 data "aws_ami" "ubuntu" {
   most_recent = true
@@ -146,43 +73,16 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-variable "asg_instance_type" {
+variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t3.micro"
+  default     = "t2.micro"
 }
 
-
-variable "asg_ebs_optimized" {
-  description = "Auto scaling group ebs optimized"
-  type        = bool
-  default     = false
-}
-
-variable "asg_enable_monitoring" {
-  description = "Auto scaling group enable monitoring"
-  type        = bool
-  default     = true
-}
-
-
-
-variable "asg_instance_tags" {
-  description = "Auto scaling group instance tags"
-  type        = map(string)
-  default     = { "Name" = "issue-tracker-asg-instance", "created-by" = "terraform" }
-}
-
-variable "asg_volume_tags" {
-  description = "Auto scaling group volume tags"
-  type        = map(string)
-  default     = { "Name" = "issue-tracker-asg-volume", "created-by" = "terraform" }
-}
-
-variable "asg_tags" {
-  description = "Auto scaling group tags"
-  type        = map(string)
-  default     = { "Name" = "issue-tracker-asg", "created-by" = "terraform" }
+variable "instance_count" {
+  description = "EC2 instance count"
+  type        = number
+  default     = 2
 }
 
 # ALB variables
